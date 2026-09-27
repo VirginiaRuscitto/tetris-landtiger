@@ -1,32 +1,21 @@
 # Tetris on LandTiger LPC1768
 
-Bare-metal implementation of Tetris for the LandTiger development board (NXP LPC1768, ARM Cortex-M3). The game runs entirely on the microcontroller, directly interfacing with the onboard GLCD, joystick, buttons, and DAC using memory-mapped peripherals and interrupt handlers.
-
-## Overview
-
-The game features a classic 10×20 playing field rendered on the onboard GLCD. Players control falling tetrominoes using the LandTiger joystick and buttons to move, rotate, and drop pieces. The implementation follows the standard Tetris ruleset, including all seven tetrominoes, collision detection, line clearing, score multipliers, and a bonus for clearing four lines simultaneously ("Tetris"). 
-
-A background music track and event-triggered sound effects are synthesized in real time through the onboard DAC.
+A bare-metal implementation of the Tetris game in C for the LandTiger development board, based on the NXP LPC1768 ARM Cortex-M3 microcontroller. The game runs directly on the microcontroller and uses the board's GLCD, joystick, buttons, timers and DAC. The project includes the game logic, rendering, user input, timing and sound.
 
 ## Main features
 
-- Full Tetris ruleset: 7 tetromino shapes (I, O, T, J, L, S, Z), 4 rotation states each, collision detection
-- Line clearing with row shifting and score computation (single/multi-line/tetris bonus)
+- 10×20 playing field
+- Full Tetris ruleset: 7 tetromino shapes (I, O, T, J, L, S, Z), with 4 rotation states each
+- Piece movement with collision detection
 - Soft drop (2 squares/sec while held) and hard drop (instant fall)
-- Pause/resume state machine, high score persisted across games within a session
-- Real-time rendering on GLCD: field, falling piece, live score/high score/lines cleared counters
-- Background music (Tetris theme, simplified) and 8 distinct sound effects (move, rotate, line clear, tetris, hard drop, game over, power-up spawn/activate), generated via DAC direct digital synthesis (sine lookup table)
+- Line clearing with row shifting and score computation (single/multi-line/tetris bonus)
+- Score, highest score (persisted across games within a session) and number of cleared lines displayed during the game
+- Pause and resume
+- Game-over detection
+- Random generation of tetrominoes
+- Real-time rendering on the GLCD
+- Background music (Tetris theme, simplified) and 6 distinct sound effects (move, rotate, line clear, tetris, hard drop, game over), generated via DAC direct digital synthesis (sine lookup table)
 - Fully interrupt-driven architecture: no polling in the main loop
-
-## Tech stack
-
-| Layer | Technology |
-|---|---|
-| Language | C |
-| Target | LPC1768 (ARM Cortex-M3), LandTiger board |
-| IDE / Toolchain | Keil µVision (MDK-ARM) |
-| Peripherals | GPIO, External Interrupts (EINT), Repetitive Interrupt Timer (RIT), Timer0/Timer2/Timer3, DAC, GLCD |
-| Emulation | Keil µVision LandTiger simulator (SW_Debug target) |
 
 ## Controls
 
@@ -38,14 +27,25 @@ A background music track and event-triggered sound effects are synthesized in re
 | Joystick up | Rotate piece 90° clockwise |
 | Joystick down (hold) | Soft drop |
 
-## Screenshots
+## Tech stack
 
-![start-game](screenshots/start-game.jpeg)
+| Layer | Technology |
+|---|---|
+| Language | C |
+| Microcontroller | NXP LPC1768 – ARM Cortex-M3 |
+| Board | LandTiger |
+| IDE / Toolchain | Keil µVision (MDK-ARM) |
+| Peripherals | GPIO (joystick, buttons), External Interrupts (EINT), Repetitive Interrupt Timer (RIT), Timer0, Timer2, Timer3, DAC, GLCD |
+| Emulation | Keil µVision LandTiger simulator |
 
-![gameplay](screenshots/gameplay.jpeg)
+## Photos
+
+<img src="screenshots/start-game.jpeg" width="450">
+
+<img src="screenshots/gameplay.jpeg" width="450">
 
 ## Run in Keil µVision
 
-1. Open `sample.uvprojx` in Keil µVision (MDK-ARM).
+1. Open `sample.uvprojx` with Keil µVision.
 2. Select the "SW_Debug" compilation target to run on the LandTiger emulator (or the release target if using a physical board).
-3. Build and start a debug session.
+3. Build the project and start a debug session.
